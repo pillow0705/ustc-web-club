@@ -9,7 +9,7 @@ PASSWORD = 'Cvyvhv666'
 REMOTE_DIR = '/root/program/ustc-web-club'
 LOCAL_DIR = os.path.dirname(os.path.abspath(__file__))
 
-EXCLUDE = {'node_modules', '.git', 'dist', 'club.db', 'deploy.py', '__pycache__'}
+EXCLUDE = {'node_modules', 'package-lock.json', '.git', 'dist', 'club.db', 'deploy.py', '__pycache__'}
 
 def ssh_exec(ssh, cmd):
     print(f'  >> {cmd}')
@@ -71,6 +71,9 @@ def main():
     # 3. Install dependencies & build
     print('\n=== Checking Node.js ===')
     ssh_exec(ssh, 'node -v || echo "NODE_NOT_FOUND"')
+
+    print('\n=== Remove node_modules for cross-platform compatibility ===')
+    ssh_exec(ssh, f'cd {REMOTE_DIR}/backend && rm -rf node_modules package-lock.json')
 
     print('\n=== Installing backend dependencies ===')
     ssh_exec(ssh, f'cd {REMOTE_DIR}/backend && npm install --production')
