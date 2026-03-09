@@ -97,5 +97,22 @@ router.post('/:id/like', authMiddleware, async (req, res) => {
   }
 });
 
+// ==================== 编辑项目 ====================
+// PUT /api/projects/:id - 只有创建者可以编辑
+router.put('/:id', authMiddleware, async (req, res) => {
+  try {
+    const project = await Project.findByPk(req.params.id);
+    if (!project) return res.status(404).json({ message: '项目不存在' });
+    if (project.creatorId !== req.user.id) {
+      return res.status(403).json({ message: '只能编辑自己的项目' });
+    }
+    const { title, description, difficulty, status, techStack, requiredMembers } = req.body;
+    await project.update({ title, description, difficulty, status, techStack, requiredMembers });
+    res.json(project);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 // 导出路由
 module.exports = router;

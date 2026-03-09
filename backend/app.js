@@ -8,8 +8,8 @@ const { sequelize } = require('./models');
 const authRoutes = require('./routes/auth');
 const activityRoutes = require('./routes/activities');
 const projectRoutes = require('./routes/projects');
-const voteRoutes = require('./routes/votes');
 const userRoutes = require('./routes/users');
+const commentRoutes = require('./routes/comments');
 
 // 创建 Express 应用实例
 const app = express();
@@ -22,8 +22,10 @@ app.use(express.json()); // 解析 JSON 请求体
 app.use('/api/auth', authRoutes);
 app.use('/api/activities', activityRoutes);
 app.use('/api/projects', projectRoutes);
-app.use('/api/votes', voteRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/comments', commentRoutes);
+// 提供上传文件的静态访问
+app.use('/uploads', require('express').static('uploads'));
 
 // 健康检查端点 (用于监控服务是否正常运行)
 app.get('/api/health', (req, res) => {

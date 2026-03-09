@@ -2,11 +2,11 @@
   <div id="app">
     <nav class="navbar">
       <div class="nav-container">
-        <router-link to="/" class="nav-brand">USTC Web Club</router-link>
+        <router-link to="/" class="nav-brand">USTC Vibe Club</router-link>
         <div class="nav-links">
+          <router-link to="/about">介绍</router-link>
           <router-link to="/activities">活动</router-link>
           <router-link to="/projects">项目池</router-link>
-          <router-link to="/vote">投票</router-link>
           <router-link to="/leaderboard">排行榜</router-link>
           <template v-if="auth.isLoggedIn">
             <router-link :to="`/profile/${auth.user.id}`">我的</router-link>

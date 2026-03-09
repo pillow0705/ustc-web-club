@@ -6,7 +6,7 @@ const Activity = require('./Activity');
 const ActivitySignup = require('./ActivitySignup');
 const Project = require('./Project');
 const ProjectLike = require('./ProjectLike');
-const { Vote, VoteOption, UserVote } = require('./Vote');
+const Comment = require('./Comment');
 
 // ==================== 模型关联定义 ====================
 
@@ -26,24 +26,19 @@ Project.belongsTo(User, { foreignKey: 'creatorId', as: 'creator' });
 Project.belongsToMany(User, { through: ProjectLike, foreignKey: 'projectId', as: 'likedBy' });
 User.belongsToMany(Project, { through: ProjectLike, foreignKey: 'userId', as: 'likedProjects' });
 
-// 投票相关关系
-User.hasMany(Vote, { foreignKey: 'creatorId' });
-Vote.belongsTo(User, { foreignKey: 'creatorId', as: 'creator' });
-Vote.hasMany(VoteOption, { foreignKey: 'voteId', as: 'options' });
-VoteOption.belongsTo(Vote, { foreignKey: 'voteId' });
-VoteOption.belongsTo(Project, { foreignKey: 'projectId', as: 'project' });
-VoteOption.hasMany(UserVote, { foreignKey: 'optionId' });
-UserVote.belongsTo(VoteOption, { foreignKey: 'optionId' });
+// 项目-评论关系
+Project.hasMany(Comment, { foreignKey: 'projectId', as: 'comments' });
+Comment.belongsTo(Project, { foreignKey: 'projectId' });
+Comment.belongsTo(User, { foreignKey: 'userId', as: 'author' });
+User.hasMany(Comment, { foreignKey: 'userId' });
 
 // ==================== 导出所有模型和数据库连接 ====================
 module.exports = {
-  sequelize, // 数据库连接实例
+  sequelize,
   User,
   Activity,
   ActivitySignup,
   Project,
   ProjectLike,
-  Vote,
-  VoteOption,
-  UserVote,
+  Comment,
 };

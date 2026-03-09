@@ -17,8 +17,8 @@ const routes = [
   // 项目相关页面
   { path: '/projects', name: 'Projects', component: () => import('../views/Projects.vue') },
 
-  // 投票页面
-  { path: '/vote', name: 'Vote', component: () => import('../views/VotePage.vue') },
+  // 介绍页面
+  { path: '/about', name: 'About', component: () => import('../views/About.vue') },
 
   // 用户相关页面
   { path: '/profile/:id', name: 'Profile', component: () => import('../views/Profile.vue') },

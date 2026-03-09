@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="hero card">
-      <h1>USTC Web Club</h1>
+      <h1>USTC Vibe Club</h1>
       <p class="text-gray mt-16">中国科学技术大学 Web 开发俱乐部 - 一起编码，一起成长</p>
       <div class="mt-16 flex gap-8">
         <router-link to="/activities" class="btn btn-primary">查看活动</router-link>

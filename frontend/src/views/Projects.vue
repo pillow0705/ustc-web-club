@@ -69,9 +69,37 @@
         <div class="flex gap-8">
           <span v-for="tag in techTags(proj.techStack)" :key="tag" class="tag tag-blue">{{ tag }}</span>
         </div>
-        <button v-if="auth.isLoggedIn" class="btn btn-small" :class="proj._liked ? 'btn-danger' : 'btn-primary'" @click="toggleLike(proj)">
-          {{ proj._liked ? '取消赞' : '点赞' }} ({{ proj.likes }})
-        </button>
+        <div class="flex gap-8">
+          <button class="btn btn-small" @click="toggleComments(proj)">
+            💬 评论 ({{ commentCounts[proj.id] || 0 }})
+          </button>
+          <button v-if="auth.isLoggedIn" class="btn btn-small" :class="proj._liked ? 'btn-danger' : 'btn-primary'" @click="toggleLike(proj)">
+            {{ proj._liked ? '取消赞' : '点赞' }} ({{ proj.likes }})
+          </button>
+        </div>
+      </div>
+
+      <!-- 评论区 -->
+      <div v-if="openComments[proj.id]" class="comment-section mt-16">
+        <!-- 发表评论 -->
+        <div v-if="auth.isLoggedIn" class="flex gap-8 mb-16">
+          <input v-model="newComment[proj.id]" placeholder="写下你的评论..." style="flex:1" @keyup.enter="postComment(proj.id)" />
+          <button class="btn btn-small btn-primary" @click="postComment(proj.id)">发送</button>
+        </div>
+        <!-- 评论列表 -->
+        <div v-if="comments[proj.id]?.length === 0" class="text-gray text-small">暂无评论</div>
+        <div v-for="c in comments[proj.id]" :key="c.id" class="comment-item">
+          <div class="flex-between">
+            <div class="flex gap-8" style="align-items:center">
+              <img v-if="c.author?.avatar" :src="c.author.avatar" class="comment-avatar" />
+              <div v-else class="comment-avatar-placeholder">{{ c.author?.username?.charAt(0).toUpperCase() }}</div>
+              <strong class="text-small">{{ c.author?.username }}</strong>
+              <span class="text-gray text-small">{{ formatDate(c.createdAt) }}</span>
+            </div>
+            <button v-if="auth.user?.id === c.userId" class="btn btn-small btn-danger" @click="deleteComment(proj.id, c.id)">删除</button>
+          </div>
+          <p class="text-small mt-8" style="padding-left:36px">{{ c.content }}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -87,6 +115,10 @@ const projects = ref([])
 const showForm = ref(false)
 const form = ref({ title: '', description: '', difficulty: 'intermediate', techStack: '', requiredMembers: 2 })
 const filter = ref({ difficulty: '', status: '' })
+const comments = ref({})
+const openComments = ref({})
+const newComment = ref({})
+const commentCounts = ref({})
 
 const filteredProjects = computed(() => {
   return projects.value.filter(p => {
@@ -99,7 +131,48 @@ const filteredProjects = computed(() => {
 onMounted(loadProjects)
 
 async function loadProjects() {
-  try { projects.value = await api.get('/projects') } catch {}
+  try {
+    projects.value = await api.get('/projects')
+    // 加载每个项目的评论数
+    for (const proj of projects.value) {
+      try {
+        const cs = await api.get(`/comments/${proj.id}`)
+        commentCounts.value[proj.id] = cs.length
+      } catch {}
+    }
+  } catch {}
+}
+
+async function toggleComments(proj) {
+  openComments.value[proj.id] = !openComments.value[proj.id]
+  if (openComments.value[proj.id] && !comments.value[proj.id]) {
+    try {
+      comments.value[proj.id] = await api.get(`/comments/${proj.id}`)
+    } catch {}
+  }
+}
+
+async function postComment(projectId) {
+  const content = newComment.value[projectId]
+  if (!content?.trim()) return
+  try {
+    const c = await api.post(`/comments/${projectId}`, { content })
+    comments.value[projectId] = [c, ...(comments.value[projectId] || [])]
+    commentCounts.value[projectId] = (commentCounts.value[projectId] || 0) + 1
+    newComment.value[projectId] = ''
+  } catch (e) { alert(e.message || '评论失败') }
+}
+
+async function deleteComment(projectId, commentId) {
+  try {
+    await api.delete(`/comments/${commentId}`)
+    comments.value[projectId] = comments.value[projectId].filter(c => c.id !== commentId)
+    commentCounts.value[projectId]--
+  } catch (e) { alert(e.message || '删除失败') }
+}
+
+function formatDate(d) {
+  return new Date(d).toLocaleString('zh-CN', { month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })
 }
 
 async function createProject() {
@@ -129,3 +202,16 @@ function difficultyTagClass(d) {
   return { beginner: 'tag-green', intermediate: 'tag-orange', advanced: 'tag-red' }[d]
 }
 </script>
+
+<style scoped>
+.comment-section { border-top: 1px solid #ebeef5; padding-top: 16px; }
+.comment-item { padding: 8px 0; border-bottom: 1px solid #f5f5f5; }
+.comment-item:last-child { border-bottom: none; }
+.comment-avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
+.comment-avatar-placeholder {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #409eff; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700;
+}
+</style>
