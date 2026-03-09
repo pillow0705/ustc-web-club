@@ -8,8 +8,7 @@ dist/
 *.db
 *.sqlite
 
-# 环境变量（包含敏感信息，不上传）
-.env
+# 环境变量
 .env.local
 .env.production
 
