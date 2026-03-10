@@ -16,6 +16,10 @@ const routes = [
 
   // 项目相关页面
   { path: '/projects', name: 'Projects', component: () => import('../views/Projects.vue') },
+  { path: '/projects/:id', name: 'ProjectDetail', component: () => import('../views/ProjectDetail.vue') },
+
+  // 管理员页面
+  { path: '/admin', name: 'Admin', component: () => import('../views/Admin.vue') },
 
   // 介绍页面
   { path: '/about', name: 'About', component: () => import('../views/About.vue') },

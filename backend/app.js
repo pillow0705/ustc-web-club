@@ -10,6 +10,7 @@ const activityRoutes = require('./routes/activities');
 const projectRoutes = require('./routes/projects');
 const userRoutes = require('./routes/users');
 const commentRoutes = require('./routes/comments');
+const adminRoutes = require('./routes/admin');
 
 // 创建 Express 应用实例
 const app = express();
@@ -24,6 +25,7 @@ app.use('/api/activities', activityRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/comments', commentRoutes);
+app.use('/api/admin', adminRoutes);
 // 提供上传文件的静态访问
 app.use('/uploads', require('express').static('uploads'));
 

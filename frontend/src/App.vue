@@ -19,6 +19,9 @@
         <!-- Auth -->
         <div class="nav-auth">
           <template v-if="auth.isLoggedIn">
+            <router-link v-if="auth.isAdmin" to="/admin" class="btn btn-ghost btn-small admin-btn">
+              🛠 管理
+            </router-link>
             <router-link :to="`/profile/${auth.user.id}`" class="nav-avatar-btn">
               <img v-if="auth.user.avatar" :src="auth.user.avatar" class="nav-avatar" />
               <div v-else class="nav-avatar-placeholder">{{ auth.user.username?.charAt(0).toUpperCase() }}</div>
@@ -178,6 +181,14 @@ function handleLogout() {
   font-size: 13px;
   font-weight: 500;
   color: var(--text-primary);
+}
+.admin-btn {
+  border-color: rgba(6, 182, 212, 0.3);
+  color: #67e8f9 !important;
+}
+.admin-btn:hover {
+  border-color: rgba(6, 182, 212, 0.6);
+  background: rgba(6, 182, 212, 0.08) !important;
 }
 
 /* Footer */

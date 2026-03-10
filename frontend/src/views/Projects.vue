@@ -70,8 +70,9 @@
           <span v-for="tag in techTags(proj.techStack)" :key="tag" class="tag tag-blue">{{ tag }}</span>
         </div>
         <div class="flex gap-8">
-          <button class="btn btn-small" @click="toggleComments(proj)">
-            💬 评论 ({{ commentCounts[proj.id] || 0 }})
+          <router-link :to="`/projects/${proj.id}`" class="btn btn-ghost btn-small">详情 →</router-link>
+          <button class="btn btn-small btn-ghost" @click="toggleComments(proj)">
+            💬 {{ commentCounts[proj.id] || 0 }}
           </button>
           <button v-if="auth.isLoggedIn" class="btn btn-small" :class="proj._liked ? 'btn-danger' : 'btn-primary'" @click="toggleLike(proj)">
             {{ proj._liked ? '取消赞' : '点赞' }} ({{ proj.likes }})
