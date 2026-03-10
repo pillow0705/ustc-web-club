@@ -204,13 +204,13 @@ function difficultyTagClass(d) {
 </script>
 
 <style scoped>
-.comment-section { border-top: 1px solid #ebeef5; padding-top: 16px; }
-.comment-item { padding: 8px 0; border-bottom: 1px solid #f5f5f5; }
+.comment-section { border-top: 1px solid var(--border); padding-top: 16px; }
+.comment-item { padding: 10px 0; border-bottom: 1px solid var(--border); }
 .comment-item:last-child { border-bottom: none; }
 .comment-avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
 .comment-avatar-placeholder {
   width: 28px; height: 28px; border-radius: 50%;
-  background: #409eff; color: #fff;
+  background: var(--gradient); color: #fff;
   display: flex; align-items: center; justify-content: center;
   font-size: 12px; font-weight: 700;
 }

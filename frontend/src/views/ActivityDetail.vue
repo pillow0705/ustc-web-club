@@ -1,5 +1,11 @@
 <template>
-  <div v-if="activity">
+  <div v-if="loading" class="text-center text-gray" style="padding:60px">加载中...</div>
+  <div v-else-if="!activity" class="card text-center text-gray" style="padding:60px">
+    <p style="font-size:32px;margin-bottom:12px">🔍</p>
+    <p>活动不存在或加载失败</p>
+    <router-link to="/activities" class="btn btn-ghost btn-small" style="margin-top:16px">返回活动列表</router-link>
+  </div>
+  <div v-else>
     <div class="card">
       <div class="flex-between">
         <h2>{{ activity.title }}</h2>
@@ -39,6 +45,7 @@ import { useAuthStore } from '../stores/auth'
 const route = useRoute()
 const auth = useAuthStore()
 const activity = ref(null)
+const loading = ref(true)
 
 const hasSignedUp = computed(() => {
   if (!auth.user || !activity.value?.participants) return false
@@ -48,7 +55,9 @@ const hasSignedUp = computed(() => {
 onMounted(loadActivity)
 
 async function loadActivity() {
+  loading.value = true
   try { activity.value = await api.get(`/activities/${route.params.id}`) } catch {}
+  loading.value = false
 }
 
 async function signup() {

@@ -100,7 +100,7 @@
           </div>
           <div class="flex gap-8">
             <button class="btn btn-primary btn-small" @click="saveProject">保存</button>
-            <button class="btn btn-small" @click="editingProject = null">取消</button>
+            <button class="btn btn-ghost btn-small" @click="editingProject = null">取消</button>
           </div>
         </div>
       </div>
@@ -207,25 +207,35 @@ watch(() => route.params.id, loadProfile)
 .avatar {
   width: 64px; height: 64px;
   border-radius: 50%;
-  background: #409eff; color: #fff;
+  background: var(--gradient); color: #fff;
   display: flex; align-items: center; justify-content: center;
   font-size: 24px; font-weight: 700;
 }
 .avatar-img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; }
 .avatar-upload-btn {
   position: absolute; bottom: 0; right: 0;
-  background: #fff; border-radius: 50%;
-  width: 22px; height: 22px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 24px; height: 24px;
   display: flex; align-items: center; justify-content: center;
   font-size: 12px; cursor: pointer;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  transition: border-color 0.2s;
 }
+.avatar-upload-btn:hover { border-color: var(--accent); }
 .stats-box { display: flex; gap: 24px; text-align: center; }
 .project-item {
-  padding: 12px 0;
-  border-bottom: 1px solid #ebeef5;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
 }
 .project-item:last-child { border-bottom: none; }
-.edit-form { background: #f9f9f9; padding: 12px; border-radius: 8px; }
+.edit-form {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  padding: 16px;
+  border-radius: 10px;
+  margin-top: 12px;
+}
 .ml-8 { margin-left: 8px; }
 </style>

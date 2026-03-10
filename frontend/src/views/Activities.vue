@@ -1,9 +1,12 @@
 <template>
   <div>
-    <div class="flex-between mb-16">
-      <h2>活动列表</h2>
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">活动</h1>
+        <p class="text-gray text-small">在西图研讨室 & 高新区研讨室相聚，一起 Vibe</p>
+      </div>
       <button v-if="auth.isAdmin" class="btn btn-primary" @click="showForm = !showForm">
-        {{ showForm ? '取消' : '发布活动' }}
+        {{ showForm ? '取消' : '+ 发布活动' }}
       </button>
     </div>
 
@@ -12,15 +15,15 @@
       <form @submit.prevent="createActivity">
         <div class="form-group">
           <label>标题</label>
-          <input v-model="form.title" required />
+          <input v-model="form.title" required placeholder="例：第 3 期 Vibe Session" />
         </div>
         <div class="form-group">
           <label>描述</label>
-          <textarea v-model="form.description" rows="3" required></textarea>
+          <textarea v-model="form.description" rows="3" required placeholder="本次活动内容..."></textarea>
         </div>
         <div class="form-group">
           <label>地点</label>
-          <input v-model="form.location" />
+          <input v-model="form.location" placeholder="西区图书馆研讨室 / 高新区研讨室" />
         </div>
         <div class="flex gap-16">
           <div class="form-group" style="flex:1">
@@ -33,23 +36,33 @@
           </div>
         </div>
         <div class="form-group">
-          <label>最大人数 (0=不限)</label>
+          <label>最大人数 (0 = 不限)</label>
           <input v-model.number="form.maxParticipants" type="number" min="0" />
         </div>
         <button type="submit" class="btn btn-primary">发布</button>
       </form>
     </div>
 
-    <div v-if="activities.length === 0" class="card text-gray">暂无活动</div>
-    <div v-for="act in activities" :key="act.id" class="card">
-      <div class="flex-between">
-        <h3>{{ act.title }}</h3>
-        <span class="tag" :class="statusTagClass(act.status)">{{ statusText(act.status) }}</span>
-      </div>
-      <p class="text-small text-gray mt-16">{{ act.location }} | {{ formatDate(act.startTime) }} - {{ formatDate(act.endTime) }}</p>
-      <p class="mt-16">{{ act.description }}</p>
-      <div class="mt-16">
-        <router-link :to="`/activities/${act.id}`" class="btn btn-small btn-primary">详情</router-link>
+    <div v-if="activities.length === 0" class="empty-state">
+      <div class="empty-icon">📅</div>
+      <p>暂无活动，敬请期待</p>
+    </div>
+
+    <div class="activities-grid">
+      <div v-for="act in activities" :key="act.id" class="activity-card card">
+        <div class="card-header">
+          <span class="tag" :class="statusTagClass(act.status)">{{ statusText(act.status) }}</span>
+          <span class="text-muted text-small">{{ formatDate(act.startTime) }}</span>
+        </div>
+        <h3 class="act-title">{{ act.title }}</h3>
+        <p class="text-secondary text-small mt-8">📍 {{ act.location }}</p>
+        <p class="act-desc mt-16">{{ act.description }}</p>
+        <div class="card-footer mt-16">
+          <span class="text-muted text-small">
+            结束：{{ formatDate(act.endTime) }}
+          </span>
+          <router-link :to="`/activities/${act.id}`" class="btn btn-ghost btn-small">详情 →</router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -92,3 +105,46 @@ function formatDate(d) {
   return new Date(d).toLocaleString('zh-CN', { month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })
 }
 </script>
+
+<style scoped>
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+.page-title { font-size: 24px; font-weight: 800; }
+
+.empty-state {
+  text-align: center;
+  padding: 60px;
+  color: var(--text-secondary);
+}
+.empty-icon { font-size: 40px; margin-bottom: 12px; }
+
+.activities-grid { display: flex; flex-direction: column; gap: 12px; }
+.activity-card { margin-bottom: 0; }
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.act-title { font-size: 18px; font-weight: 700; }
+.act-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+</style>

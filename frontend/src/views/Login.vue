@@ -1,7 +1,8 @@
 <template>
   <div class="auth-page">
     <div class="card auth-card">
-      <h2>登录</h2>
+      <h2>欢迎回来</h2>
+      <p class="sub">登录你的 Vibe Club 账号</p>
       <div v-if="error" class="error-msg">{{ error }}</div>
       <form @submit.prevent="handleLogin">
         <div class="form-group">
@@ -46,6 +47,15 @@ async function handleLogin() {
 <style scoped>
 .auth-page { display: flex; justify-content: center; padding-top: 60px; }
 .auth-card { width: 400px; }
-.auth-card h2 { margin-bottom: 24px; }
-.error-msg { background: #fef0f0; color: #f56c6c; padding: 8px 12px; border-radius: 6px; margin-bottom: 16px; font-size: 14px; }
+.auth-card h2 { margin-bottom: 8px; font-size: 24px; font-weight: 800; }
+.auth-card .sub { color: var(--text-secondary); font-size: 14px; margin-bottom: 28px; }
+.error-msg {
+  background: rgba(244, 63, 94, 0.1);
+  border: 1px solid rgba(244, 63, 94, 0.25);
+  color: #fda4af;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
 </style>
