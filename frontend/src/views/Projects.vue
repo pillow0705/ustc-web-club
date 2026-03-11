@@ -33,8 +33,8 @@
           </div>
         </div>
         <div class="form-group">
-          <label>技术栈 (逗号分隔)</label>
-          <input v-model="form.techStack" placeholder="Vue, Node.js, MySQL" />
+          <label>GitHub 链接（可选）</label>
+          <input v-model="form.githubLink" placeholder="https://github.com/..." />
         </div>
         <button type="submit" class="btn btn-primary">提交</button>
       </form>
@@ -114,7 +114,7 @@ import { useAuthStore } from '../stores/auth'
 const auth = useAuthStore()
 const projects = ref([])
 const showForm = ref(false)
-const form = ref({ title: '', description: '', difficulty: 'intermediate', techStack: '', requiredMembers: 2 })
+const form = ref({ title: '', description: '', difficulty: 'intermediate', githubLink: '', requiredMembers: 2 })
 const filter = ref({ difficulty: '', status: '' })
 const comments = ref({})
 const openComments = ref({})

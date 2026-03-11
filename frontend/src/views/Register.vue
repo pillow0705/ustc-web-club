@@ -2,11 +2,10 @@
   <div class="auth-page">
     <div class="card auth-card">
       <h2>加入 Vibe Club</h2>
-      <p class="sub">科大同学专属编程社区</p>
       <div v-if="error" class="error-msg">{{ error }}</div>
       <form @submit.prevent="handleRegister">
         <div class="form-group">
-          <label>用户名</label>
+          <label>用户名（随意起一个自己喜欢的名字吧~）</label>
           <input v-model="username" placeholder="请输入用户名" required />
         </div>
         <div class="form-group">
@@ -14,7 +13,7 @@
           <input v-model="email" type="email" placeholder="your@mail.ustc.edu.cn" required />
         </div>
         <div class="form-group">
-          <label>密码</label>
+          <label>密码（设置一个自己的密码）</label>
           <input v-model="password" type="password" placeholder="至少6位" required minlength="6" />
         </div>
         <button type="submit" class="btn btn-primary" style="width:100%">注册</button>

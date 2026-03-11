@@ -53,6 +53,33 @@ router.post('/', authMiddleware, adminMiddleware, async (req, res) => {
   }
 });
 
+// ==================== 编辑活动 ====================
+// PUT /api/activities/:id - 仅限管理员
+router.put('/:id', authMiddleware, adminMiddleware, async (req, res) => {
+  try {
+    const activity = await Activity.findByPk(req.params.id);
+    if (!activity) return res.status(404).json({ message: '活动不存在' });
+    const { title, description, location, startTime, endTime, maxParticipants, status } = req.body;
+    await activity.update({ title, description, location, startTime, endTime, maxParticipants, status });
+    res.json(activity);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// ==================== 删除活动 ====================
+// DELETE /api/activities/:id - 仅限管理员
+router.delete('/:id', authMiddleware, adminMiddleware, async (req, res) => {
+  try {
+    const activity = await Activity.findByPk(req.params.id);
+    if (!activity) return res.status(404).json({ message: '活动不存在' });
+    await activity.destroy();
+    res.json({ message: '活动已删除' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 // ==================== 报名参加活动 ====================
 // POST /api/activities/:id/signup
 // 用户报名参加某个活动（需要身份验证）

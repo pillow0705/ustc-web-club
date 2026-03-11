@@ -21,12 +21,16 @@ const routes = [
   // 管理员页面
   { path: '/admin', name: 'Admin', component: () => import('../views/Admin.vue') },
 
-  // 介绍页面
-  { path: '/about', name: 'About', component: () => import('../views/About.vue') },
+  // 成员手册
+  { path: '/handbook', name: 'Handbook', component: () => import('../views/Handbook.vue') },
 
   // 用户相关页面
   { path: '/profile/:id', name: 'Profile', component: () => import('../views/Profile.vue') },
   { path: '/leaderboard', name: 'Leaderboard', component: () => import('../views/Leaderboard.vue') },
+
+  // 私信
+  { path: '/messages', name: 'Messages', component: () => import('../views/Messages.vue') },
+  { path: '/messages/:userId', name: 'MessageThread', component: () => import('../views/Messages.vue') },
 ]
 
 // 创建路由实例

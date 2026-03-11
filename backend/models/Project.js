@@ -43,6 +43,11 @@ const Project = sequelize.define('Project', {
     type: DataTypes.ENUM('open', 'in_progress', 'completed'),
     defaultValue: 'open',
   },
+  // GitHub 仓库链接
+  githubLink: {
+    type: DataTypes.STRING(500),
+    defaultValue: '',
+  },
   // 项目创建者 ID
   creatorId: {
     type: DataTypes.INTEGER,

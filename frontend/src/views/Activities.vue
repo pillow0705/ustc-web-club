@@ -50,18 +50,28 @@
 
     <div class="activities-grid">
       <div v-for="act in activities" :key="act.id" class="activity-card card">
-        <div class="card-header">
-          <span class="tag" :class="statusTagClass(act.status)">{{ statusText(act.status) }}</span>
-          <span class="text-muted text-small">{{ formatDate(act.startTime) }}</span>
+        <div class="card-main">
+          <div class="card-left">
+            <div class="card-top">
+              <span class="tag" :class="statusTagClass(act.status)">{{ statusText(act.status) }}</span>
+            </div>
+            <h3 class="act-title">{{ act.title }}</h3>
+            <p class="text-secondary text-small mt-8">📍 {{ act.location }}</p>
+            <p class="act-desc mt-16">{{ act.description }}</p>
+          </div>
+          <div class="card-time">
+            <div class="time-block">
+              <div class="time-label">开始</div>
+              <div class="time-value">{{ formatDate(act.startTime) }}</div>
+            </div>
+            <div class="time-block">
+              <div class="time-label">结束</div>
+              <div class="time-value">{{ formatDate(act.endTime) }}</div>
+            </div>
+          </div>
         </div>
-        <h3 class="act-title">{{ act.title }}</h3>
-        <p class="text-secondary text-small mt-8">📍 {{ act.location }}</p>
-        <p class="act-desc mt-16">{{ act.description }}</p>
         <div class="card-footer mt-16">
-          <span class="text-muted text-small">
-            结束：{{ formatDate(act.endTime) }}
-          </span>
-          <router-link :to="`/activities/${act.id}`" class="btn btn-ghost btn-small">详情 →</router-link>
+          <router-link :to="`/activities/${act.id}`" class="btn btn-ghost btn-small">查看详情 →</router-link>
         </div>
       </div>
     </div>
@@ -124,12 +134,9 @@ function formatDate(d) {
 
 .activities-grid { display: flex; flex-direction: column; gap: 12px; }
 .activity-card { margin-bottom: 0; }
-.card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
+.card-main { display: flex; gap: 24px; align-items: flex-start; }
+.card-left { flex: 1; min-width: 0; }
+.card-top { margin-bottom: 12px; }
 .act-title { font-size: 18px; font-weight: 700; }
 .act-desc {
   font-size: 14px;
@@ -140,10 +147,35 @@ function formatDate(d) {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+.card-time {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-sm);
+  padding: 12px 18px;
+  min-width: 160px;
+  text-align: right;
+}
+.time-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.time-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #a5b4fc;
+}
 .card-footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding-top: 12px;
   border-top: 1px solid var(--border);
 }

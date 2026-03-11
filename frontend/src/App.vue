@@ -10,10 +10,10 @@
 
         <!-- Links -->
         <div class="nav-links">
-          <router-link to="/about">介绍</router-link>
           <router-link to="/activities">活动</router-link>
           <router-link to="/projects">项目池</router-link>
           <router-link to="/leaderboard">排行榜</router-link>
+          <router-link to="/handbook">手册</router-link>
         </div>
 
         <!-- Auth -->
@@ -22,6 +22,7 @@
             <router-link v-if="auth.isAdmin" to="/admin" class="btn btn-ghost btn-small admin-btn">
               🛠 管理
             </router-link>
+            <router-link v-if="auth.isLoggedIn" to="/messages" class="btn btn-ghost btn-small">💬 消息</router-link>
             <router-link :to="`/profile/${auth.user.id}`" class="nav-avatar-btn">
               <img v-if="auth.user.avatar" :src="auth.user.avatar" class="nav-avatar" />
               <div v-else class="nav-avatar-placeholder">{{ auth.user.username?.charAt(0).toUpperCase() }}</div>
@@ -44,8 +45,8 @@
     <!-- Footer -->
     <footer class="footer">
       <div class="footer-inner">
-        <span class="gradient-text" style="font-weight:600">USTC Vibe Club</span>
-        <span style="color:var(--text-muted); font-size:13px">中国科学技术大学 · 氛围编程俱乐部</span>
+        <span class="gradient-text" style="font-weight:700;font-size:20px">USTC Vibe Club</span>
+        <span style="color:var(--text-muted); font-size:20px">中国科学技术大学 · Vibe Club</span>
       </div>
     </footer>
   </div>
@@ -108,8 +109,8 @@ function handleLogout() {
   justify-content: center;
   font-size: 15px;
   font-weight: 900;
-  color: #fff;
-  box-shadow: 0 2px 10px rgba(99, 102, 241, 0.4);
+  color: #e9dedeff;
+  box-shadow: 0 2px 10px rgba(35, 205, 145, 0.4);
 }
 
 /* Links */

@@ -3,7 +3,7 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const { User } = require('../models');
+const { User, Follow } = require('../models');
 const { authMiddleware } = require('../middleware/auth');
 const router = express.Router();
 
@@ -48,14 +48,18 @@ router.get('/', async (req, res) => {
 
 // ==================== 获取用户资料 ====================
 // GET /api/users/:id
-// 获取指定用户的详细资料信息（不包含密码）
+// 获取指定用户的详细资料信息（不包含密码），含关注数/粉丝数
 router.get('/:id', async (req, res) => {
   try {
     const user = await User.findByPk(req.params.id, {
-      attributes: { exclude: ['password'] }, // 隐藏密码字段
+      attributes: { exclude: ['password'] },
     });
     if (!user) return res.status(404).json({ message: '用户不存在' });
-    res.json(user);
+
+    const followingCount = await Follow.count({ where: { followerId: user.id } });
+    const followersCount = await Follow.count({ where: { followingId: user.id } });
+
+    res.json({ ...user.toJSON(), followingCount, followersCount });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -99,7 +103,6 @@ router.post('/avatar', authMiddleware, upload.single('avatar'), async (req, res)
 });
 
 // ==================== 获取用户创建的项目 ====================
-// GET /api/users/:id/projects
 router.get('/:id/projects', async (req, res) => {
   try {
     const { Project } = require('../models');
@@ -108,6 +111,96 @@ router.get('/:id/projects', async (req, res) => {
       order: [['createdAt', 'DESC']],
     });
     res.json(projects);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// ==================== 获取用户加入的项目 ====================
+router.get('/:id/joined-projects', async (req, res) => {
+  try {
+    const { Project, User } = require('../models');
+    const user = await User.findByPk(req.params.id, {
+      include: [{
+        model: Project,
+        as: 'joinedProjects',
+        include: [{ model: User, as: 'creator', attributes: ['id', 'username'] }],
+        through: { attributes: [] },
+      }],
+    });
+    if (!user) return res.status(404).json({ message: '用户不存在' });
+    res.json(user.joinedProjects || []);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// ==================== 关注用户 ====================
+// POST /api/users/:id/follow
+router.post('/:id/follow', authMiddleware, async (req, res) => {
+  try {
+    const targetId = parseInt(req.params.id);
+    if (targetId === req.user.id) return res.status(400).json({ message: '不能关注自己' });
+    const target = await User.findByPk(targetId);
+    if (!target) return res.status(404).json({ message: '用户不存在' });
+    const [, created] = await Follow.findOrCreate({
+      where: { followerId: req.user.id, followingId: targetId },
+    });
+    if (!created) return res.status(400).json({ message: '已经关注了该用户' });
+    res.json({ message: '关注成功' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// ==================== 取关用户 ====================
+// DELETE /api/users/:id/follow
+router.delete('/:id/follow', authMiddleware, async (req, res) => {
+  try {
+    const targetId = parseInt(req.params.id);
+    const deleted = await Follow.destroy({
+      where: { followerId: req.user.id, followingId: targetId },
+    });
+    if (!deleted) return res.status(400).json({ message: '未关注该用户' });
+    res.json({ message: '取关成功' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// ==================== 获取粉丝列表 ====================
+// GET /api/users/:id/followers
+router.get('/:id/followers', async (req, res) => {
+  try {
+    const user = await User.findByPk(req.params.id, {
+      include: [{
+        model: User,
+        as: 'followers',
+        attributes: ['id', 'username', 'avatar'],
+        through: { attributes: [] },
+      }],
+    });
+    if (!user) return res.status(404).json({ message: '用户不存在' });
+    res.json(user.followers || []);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// ==================== 获取关注列表 ====================
+// GET /api/users/:id/following
+router.get('/:id/following', async (req, res) => {
+  try {
+    const user = await User.findByPk(req.params.id, {
+      include: [{
+        model: User,
+        as: 'following',
+        attributes: ['id', 'username', 'avatar'],
+        through: { attributes: [] },
+      }],
+    });
+    if (!user) return res.status(404).json({ message: '用户不存在' });
+    res.json(user.following || []);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
