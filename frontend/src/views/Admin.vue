@@ -339,11 +339,11 @@ function formatDate(d) {
 
 <style scoped>
 .page-header { margin-bottom: 24px; }
-.page-title { font-size: 24px; font-weight: 800; }
+.page-title { font-size: 24px; font-family: Georgia, serif; font-weight: 400; }
 
 .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
 .stat-card { text-align: center; padding: 20px; }
-.stat-num { font-size: 28px; font-weight: 800; }
+.stat-num { font-size: 28px; font-weight: 700; }
 .stat-label { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
 
 .tab-row {
@@ -357,7 +357,7 @@ function formatDate(d) {
   margin-bottom: -1px; transition: color 0.2s, border-color 0.2s;
 }
 .tab-btn:hover { color: var(--text-primary); }
-.tab-btn.active { color: #a5b4fc; border-bottom-color: var(--accent); }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
 
 .activity-form {
   background: var(--bg-surface);
@@ -375,15 +375,15 @@ function formatDate(d) {
 }
 .admin-table td { padding: 13px 20px; border-bottom: 1px solid var(--border); font-size: 14px; }
 .admin-table tr:last-child td { border-bottom: none; }
-.admin-table tr:hover td { background: rgba(99,102,241,0.03); }
+.admin-table tr:hover td { background: rgba(217, 119, 87, 0.03); }
 
 .act-title { font-weight: 600; color: var(--text-primary); }
-.act-title:hover { color: #a5b4fc; }
+.act-title:hover { color: var(--accent); }
 
 .user-cell { display: flex; align-items: center; gap: 10px; }
 .u-avatar {
   width: 28px; height: 28px; border-radius: 50%;
-  background: var(--gradient); color: #fff;
+  background: var(--accent); color: #fff;
   display: flex; align-items: center; justify-content: center;
   font-size: 11px; font-weight: 700;
 }
@@ -393,7 +393,7 @@ function formatDate(d) {
 .log-item { display: flex; align-items: flex-start; gap: 14px; padding: 14px 20px; border-bottom: 1px solid var(--border); font-size: 14px; }
 .log-item:last-child { border-bottom: none; }
 .log-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
-.user-icon    { background: rgba(99,102,241,0.15); }
+.user-icon    { background: rgba(217, 119, 87, 0.15); }
 .project-icon { background: rgba(6,182,212,0.15); }
 .comment-icon { background: rgba(16,185,129,0.15); }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="flex-between mb-16">
-      <h2>项目池</h2>
+      <h2 class="page-title-serif">项目池</h2>
       <button v-if="auth.isLoggedIn" class="btn btn-primary" @click="showForm = !showForm">
         {{ showForm ? '取消' : '提交项目' }}
       </button>
@@ -205,14 +205,15 @@ function difficultyTagClass(d) {
 </script>
 
 <style scoped>
+.page-title-serif { font-family: Georgia, serif; font-size: 24px; font-weight: 400; }
 .comment-section { border-top: 1px solid var(--border); padding-top: 16px; }
 .comment-item { padding: 10px 0; border-bottom: 1px solid var(--border); }
 .comment-item:last-child { border-bottom: none; }
 .comment-avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
 .comment-avatar-placeholder {
   width: 28px; height: 28px; border-radius: 50%;
-  background: var(--gradient); color: #fff;
+  background: var(--accent); color: #fff;
   display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 700;
+  font-size: 12px; font-weight: 600;
 }
 </style>

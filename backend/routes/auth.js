@@ -1,14 +1,23 @@
 // 认证路由 - 处理用户注册、登录和身份验证
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const rateLimit = require('express-rate-limit');
 const { User } = require('../models');
 const { authMiddleware } = require('../middleware/auth');
 const router = express.Router();
 
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 分钟
+  max: 10,                   // 每 IP 最多 10 次
+  message: { message: '请求过于频繁，请 15 分钟后再试' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 // ==================== 用户注册 ====================
 // POST /api/auth/register
 // 注册新用户，必须使用科大邮箱
-router.post('/register', async (req, res) => {
+router.post('/register', authLimiter, async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
@@ -49,14 +58,15 @@ router.post('/register', async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: '服务器内部错误' });
   }
 });
 
 // ==================== 用户登录 ====================
 // POST /api/auth/login
 // 验证邮箱和密码，返回 JWT 令牌
-router.post('/login', async (req, res) => {
+router.post('/login', authLimiter, async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -86,7 +96,8 @@ router.post('/login', async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: '服务器内部错误' });
   }
 });
 
@@ -101,7 +112,8 @@ router.get('/me', authMiddleware, async (req, res) => {
     });
     res.json(user);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: '服务器内部错误' });
   }
 });
 

@@ -38,7 +38,7 @@
       <!-- 第2名 -->
       <div class="top3-card silver">
         <div class="top3-rank">2</div>
-        <div class="top3-avatar">{{ users[1]?.username?.charAt(0).toUpperCase() }}</div>
+        <UserAvatar :user="users[1]" :size="52" style="margin: 0 auto 10px" />
         <div class="top3-name">{{ users[1]?.username }}</div>
         <div class="top3-pts">{{ users[1]?.contributionPoints }} <span>分</span></div>
       </div>
@@ -46,14 +46,14 @@
       <div class="top3-card gold">
         <div class="top3-crown">👑</div>
         <div class="top3-rank">1</div>
-        <div class="top3-avatar gold-avatar">{{ users[0]?.username?.charAt(0).toUpperCase() }}</div>
+        <UserAvatar :user="users[0]" :size="52" style="margin: 0 auto 10px" />
         <div class="top3-name">{{ users[0]?.username }}</div>
         <div class="top3-pts">{{ users[0]?.contributionPoints }} <span>分</span></div>
       </div>
       <!-- 第3名 -->
       <div class="top3-card bronze">
         <div class="top3-rank">3</div>
-        <div class="top3-avatar">{{ users[2]?.username?.charAt(0).toUpperCase() }}</div>
+        <UserAvatar :user="users[2]" :size="52" style="margin: 0 auto 10px" />
         <div class="top3-name">{{ users[2]?.username }}</div>
         <div class="top3-pts">{{ users[2]?.contributionPoints }} <span>分</span></div>
       </div>
@@ -79,10 +79,10 @@
               <span v-else class="rank-num">{{ index + 1 }}</span>
             </td>
             <td>
-              <router-link :to="`/profile/${user.id}`" class="user-link">
-                <div class="user-avatar">{{ user.username?.charAt(0).toUpperCase() }}</div>
-                {{ user.username }}
-              </router-link>
+              <div class="user-link">
+                <UserAvatar :user="user" :size="28" />
+                <router-link :to="`/profile/${user.id}`" class="user-name-link">{{ user.username }}</router-link>
+              </div>
             </td>
             <td>
               <span class="pts-badge">{{ user.contributionPoints }}</span>
@@ -101,6 +101,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import api from '../api'
+import UserAvatar from '../components/UserAvatar.vue'
 
 const users = ref([])
 const showRules = ref(false)
@@ -117,7 +118,7 @@ onMounted(async () => {
   justify-content: space-between;
   margin-bottom: 24px;
 }
-.page-title { font-size: 24px; font-weight: 800; }
+.page-title { font-family: Georgia, serif; font-size: 24px; font-weight: 400; }
 
 /* Rules */
 .rules-card { border-left: 3px solid var(--accent); margin-bottom: 20px; }
@@ -141,8 +142,8 @@ onMounted(async () => {
   padding: 3px 8px;
   border-radius: 6px;
 }
-.rule-points.plus  { background: rgba(16,185,129,0.15); color: #6ee7b7; }
-.rule-points.minus { background: rgba(244,63,94,0.15);  color: #fda4af; }
+.rule-points.plus  { background: rgba(16,185,129,0.1); color: #059669; }
+.rule-points.minus { background: rgba(244,63,94,0.1);  color: #e11d48; }
 
 /* Top 3 */
 .top3-row {
@@ -162,7 +163,7 @@ onMounted(async () => {
   text-align: center;
   position: relative;
 }
-.gold   { border-color: rgba(245,158,11,0.4); box-shadow: 0 0 20px rgba(245,158,11,0.1); }
+.gold   { border-color: rgba(245,158,11,0.3); box-shadow: 0 0 16px rgba(245,158,11,0.08); }
 .silver { border-color: rgba(148,163,184,0.3); }
 .bronze { border-color: rgba(180,83,9,0.3); }
 
@@ -176,12 +177,12 @@ onMounted(async () => {
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  background: var(--gradient);
+  background: var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 600;
   color: #fff;
   margin: 0 auto 10px;
 }
@@ -189,10 +190,11 @@ onMounted(async () => {
   background: linear-gradient(135deg, #f59e0b, #d97706);
   box-shadow: 0 0 16px rgba(245,158,11,0.4);
 }
-.top3-name { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+.top3-name { font-size: 14px; font-weight: 500; margin-bottom: 6px; }
 .top3-pts {
-  font-size: 20px;
-  font-weight: 800;
+  font-family: Georgia, serif;
+  font-size: 22px;
+  font-weight: 400;
   color: var(--text-primary);
 }
 .top3-pts span { font-size: 12px; color: var(--text-secondary); font-weight: 400; }
@@ -203,7 +205,7 @@ onMounted(async () => {
   padding: 14px 20px;
   text-align: left;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -216,7 +218,7 @@ onMounted(async () => {
   font-size: 14px;
 }
 .leaderboard-table tr:last-child td { border-bottom: none; }
-.row-highlight td { background: rgba(99, 102, 241, 0.04); }
+.row-highlight td { background: rgba(217, 119, 87, 0.04); }
 
 .medal {
   display: inline-flex;
@@ -238,26 +240,20 @@ onMounted(async () => {
   color: var(--text-primary);
   font-weight: 500;
 }
-.user-link:hover { color: #a5b4fc; }
-.user-avatar {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--gradient);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  font-weight: 700;
-  color: #fff;
+.user-name-link {
+  color: var(--text-primary);
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s;
 }
+.user-name-link:hover { color: var(--accent); }
 .pts-badge {
   display: inline-block;
   padding: 3px 10px;
-  background: rgba(99,102,241,0.15);
-  color: #a5b4fc;
+  background: rgba(217,119,87,0.1);
+  color: var(--accent);
   border-radius: 9999px;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 13px;
 }
 </style>

@@ -1,6 +1,7 @@
 // 导入必要的模块
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config(); // 加载环境变量
 
 // 导入数据库和路由
@@ -17,8 +18,17 @@ const messageRoutes = require('./routes/messages');
 const app = express();
 
 // 中间件配置
-app.use(cors()); // 跨域资源共享
-app.use(express.json()); // 解析 JSON 请求体
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || '').split(',').filter(Boolean);
+app.use(cors({
+  origin: allowedOrigins.length > 0
+    ? (origin, cb) => {
+        if (!origin || allowedOrigins.includes(origin)) cb(null, true);
+        else cb(new Error('Not allowed by CORS'));
+      }
+    : false,
+  credentials: true,
+}));
+app.use(express.json({ limit: '100kb' })); // 解析 JSON 请求体，限制大小
 
 // API 路由配置
 app.use('/api/auth', authRoutes);
@@ -34,6 +44,13 @@ app.use('/uploads', require('express').static('uploads'));
 // 健康检查端点 (用于监控服务是否正常运行)
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', time: new Date().toISOString() });
+});
+
+// 提供前端构建文件
+const frontendDist = path.join(__dirname, '../frontend/dist');
+app.use(express.static(frontendDist));
+app.get('/{*path}', (req, res) => {
+  res.sendFile(path.join(frontendDist, 'index.html'));
 });
 
 // 从环境变量读取端口，默认为 3000

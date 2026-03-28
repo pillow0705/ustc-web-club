@@ -4,12 +4,12 @@
       <div class="nav-container">
         <!-- Logo -->
         <router-link to="/" class="nav-brand">
-          <div class="brand-icon">V</div>
-          <span>Vibe Club</span>
+          <span class="brand-name">Vibe Club</span>
         </router-link>
 
         <!-- Links -->
         <div class="nav-links">
+          <router-link to="/" exact>主页</router-link>
           <router-link to="/activities">活动</router-link>
           <router-link to="/projects">项目池</router-link>
           <router-link to="/leaderboard">排行榜</router-link>
@@ -22,7 +22,10 @@
             <router-link v-if="auth.isAdmin" to="/admin" class="btn btn-ghost btn-small admin-btn">
               🛠 管理
             </router-link>
-            <router-link v-if="auth.isLoggedIn" to="/messages" class="btn btn-ghost btn-small">💬 消息</router-link>
+            <router-link to="/messages" class="btn btn-ghost btn-small msg-btn">
+              💬 消息
+              <span v-if="unreadCount > 0" class="msg-badge">{{ unreadCount > 99 ? '99+' : unreadCount }}</span>
+            </router-link>
             <router-link :to="`/profile/${auth.user.id}`" class="nav-avatar-btn">
               <img v-if="auth.user.avatar" :src="auth.user.avatar" class="nav-avatar" />
               <div v-else class="nav-avatar-placeholder">{{ auth.user.username?.charAt(0).toUpperCase() }}</div>
@@ -45,22 +48,53 @@
     <!-- Footer -->
     <footer class="footer">
       <div class="footer-inner">
-        <span class="gradient-text" style="font-weight:700;font-size:20px">USTC Vibe Club</span>
-        <span style="color:var(--text-muted); font-size:20px">中国科学技术大学 · Vibe Club</span>
+        <span style="font-family:Georgia,serif;font-size:16px;color:var(--text-primary)">Vibe Club</span>
+        <span style="color:var(--text-muted);font-size:13px">中国科学技术大学 · Vibe Club</span>
       </div>
     </footer>
   </div>
 </template>
 
 <script setup>
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from './stores/auth'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+import api from './api'
 
 const auth = useAuthStore()
 const router = useRouter()
+const route = useRoute()
+const unreadCount = ref(0)
+let pollTimer = null
+
+async function fetchUnread() {
+  if (!auth.isLoggedIn) { unreadCount.value = 0; return }
+  try {
+    const data = await api.get('/messages')
+    unreadCount.value = Array.isArray(data) ? data.reduce((sum, c) => sum + (c.unread || 0), 0) : 0
+  } catch { unreadCount.value = 0 }
+}
+
+function startPolling() {
+  fetchUnread()
+  pollTimer = setInterval(fetchUnread, 30000)
+}
+function stopPolling() { clearInterval(pollTimer) }
+
+// 进入消息页时清零（标记已读后刷新）
+watch(() => route.path, (p) => {
+  if (p.startsWith('/messages')) setTimeout(fetchUnread, 800)
+})
+
+watch(() => auth.isLoggedIn, (v) => { v ? startPolling() : stopPolling() })
+
+onMounted(() => { if (auth.isLoggedIn) startPolling() })
+onUnmounted(stopPolling)
 
 function handleLogout() {
   auth.logout()
+  stopPolling()
+  unreadCount.value = 0
   router.push('/login')
 }
 </script>
@@ -71,17 +105,17 @@ function handleLogout() {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(8, 12, 20, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(245, 244, 237, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(20, 20, 19, 0.08);
 }
 
 .nav-container {
   max-width: 1100px;
   margin: 0 auto;
   padding: 0 24px;
-  height: 72px;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -92,51 +126,42 @@ function handleLogout() {
 .nav-brand {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--text-primary) !important;
   text-decoration: none;
   flex-shrink: 0;
 }
-.brand-icon {
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
-  background: var(--gradient);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 15px;
-  font-weight: 900;
-  color: #e9dedeff;
-  box-shadow: 0 2px 10px rgba(35, 205, 145, 0.4);
+.brand-name {
+  font-family: Georgia, serif;
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--text-primary);
+  letter-spacing: 0.01em;
 }
 
 /* Links */
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
   flex: 1;
   justify-content: center;
 }
 .nav-links a {
   color: var(--text-secondary);
-  font-size: 15px;
-  font-weight: 500;
-  padding: 7px 16px;
-  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 6px 14px;
+  border-radius: 6px;
   transition: color 0.2s, background 0.2s;
   text-decoration: none;
 }
 .nav-links a:hover {
   color: var(--text-primary);
-  background: rgba(255,255,255,0.05);
+  background: rgba(20, 20, 19, 0.05);
 }
-.nav-links a.router-link-active {
-  color: #a5b4fc;
-  background: rgba(99, 102, 241, 0.12);
+.nav-links a.router-link-active,
+.nav-links a.router-link-exact-active {
+  color: var(--accent);
+  background: rgba(217, 119, 87, 0.08);
 }
 
 /* Auth */
@@ -154,7 +179,7 @@ function handleLogout() {
   padding: 4px 10px 4px 4px;
   border-radius: 9999px;
   border: 1px solid var(--border);
-  background: var(--bg-card);
+  background: transparent;
   transition: border-color 0.2s;
   text-decoration: none;
 }
@@ -170,37 +195,59 @@ function handleLogout() {
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  background: var(--gradient);
+  background: var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 600;
   color: #fff;
 }
 .nav-username {
   font-size: 13px;
   font-weight: 500;
-  color: var(--text-primary);
+  color: #111111;
 }
+.msg-btn {
+  position: relative;
+}
+.msg-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 17px;
+  height: 17px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  line-height: 1;
+  pointer-events: none;
+}
+
 .admin-btn {
-  border-color: rgba(6, 182, 212, 0.3);
-  color: #67e8f9 !important;
+  border-color: rgba(217, 119, 87, 0.3);
+  color: var(--accent) !important;
 }
 .admin-btn:hover {
-  border-color: rgba(6, 182, 212, 0.6);
-  background: rgba(6, 182, 212, 0.08) !important;
+  border-color: var(--border-accent);
+  background: rgba(217, 119, 87, 0.07) !important;
 }
 
 /* Footer */
 .footer {
   border-top: 1px solid var(--border);
-  margin-top: 48px;
+  margin-top: 64px;
 }
 .footer-inner {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 20px 24px;
+  padding: 24px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;

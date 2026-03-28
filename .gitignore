@@ -9,6 +9,7 @@ dist/
 *.sqlite
 
 # 环境变量
+.env
 .env.local
 .env.production
 

@@ -47,12 +47,12 @@ async function handleLogin() {
 <style scoped>
 .auth-page { display: flex; justify-content: center; padding-top: 60px; }
 .auth-card { width: 400px; }
-.auth-card h2 { margin-bottom: 8px; font-size: 24px; font-weight: 800; }
+.auth-card h2 { margin-bottom: 8px; font-family: Georgia, serif; font-size: 24px; font-weight: 400; }
 .auth-card .sub { color: var(--text-secondary); font-size: 14px; margin-bottom: 28px; }
 .error-msg {
-  background: rgba(244, 63, 94, 0.1);
-  border: 1px solid rgba(244, 63, 94, 0.25);
-  color: #fda4af;
+  background: rgba(230, 57, 70, 0.07);
+  border: 1px solid rgba(230, 57, 70, 0.2);
+  color: var(--accent-red);
   padding: 10px 14px;
   border-radius: 8px;
   margin-bottom: 16px;

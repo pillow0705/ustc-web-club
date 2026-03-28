@@ -100,6 +100,7 @@ async function loadMessages(userId) {
     messages.value = Array.isArray(data) ? data : []
     await nextTick()
     scrollToBottom()
+    api.put(`/messages/${userId}/read`).then(() => loadConversations()).catch(() => {})
   } catch {}
 }
 
@@ -195,7 +196,7 @@ watch(currentUserId, async (newId) => {
   transition: background 0.15s;
 }
 .conv-item:hover { background: var(--bg-card-hover); }
-.conv-item.active { background: rgba(99, 102, 241, 0.1); border-left: 2px solid var(--accent); }
+.conv-item.active { background: rgba(217, 119, 87, 0.06); border-left: 2px solid var(--accent); }
 
 .conv-avatar { position: relative; flex-shrink: 0; }
 .conv-avatar-img {
@@ -206,7 +207,7 @@ watch(currentUserId, async (newId) => {
 .conv-avatar-placeholder {
   width: 40px; height: 40px;
   border-radius: 50%;
-  background: var(--gradient);
+  background: var(--accent);
   display: flex; align-items: center; justify-content: center;
   font-size: 16px; font-weight: 700; color: #fff;
 }
@@ -240,7 +241,7 @@ watch(currentUserId, async (newId) => {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: var(--bg-card);
+  background: #ffffff;
   overflow: hidden;
 }
 
@@ -284,9 +285,9 @@ watch(currentUserId, async (newId) => {
   font-size: 14px;
   line-height: 1.5;
   word-break: break-word;
-  background: var(--bg-surface);
-  color: var(--text-primary);
-  border: 1px solid var(--border);
+  background: #f0f0f0;
+  color: #111111;
+  border: 1px solid #e5e7eb;
 }
 .msg-row.msg-self .msg-bubble {
   background: var(--accent);

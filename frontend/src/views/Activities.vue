@@ -123,7 +123,7 @@ function formatDate(d) {
   justify-content: space-between;
   margin-bottom: 24px;
 }
-.page-title { font-size: 24px; font-weight: 800; }
+.page-title { font-family: Georgia, serif; font-size: 24px; font-weight: 400; }
 
 .empty-state {
   text-align: center;
@@ -137,7 +137,7 @@ function formatDate(d) {
 .card-main { display: flex; gap: 24px; align-items: flex-start; }
 .card-left { flex: 1; min-width: 0; }
 .card-top { margin-bottom: 12px; }
-.act-title { font-size: 18px; font-weight: 700; }
+.act-title { font-size: 17px; font-weight: 600; color: var(--text-primary); }
 .act-desc {
   font-size: 14px;
   color: var(--text-secondary);
@@ -169,8 +169,8 @@ function formatDate(d) {
 }
 .time-value {
   font-size: 14px;
-  font-weight: 600;
-  color: #a5b4fc;
+  font-weight: 500;
+  color: var(--accent);
 }
 .card-footer {
   display: flex;

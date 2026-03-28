@@ -137,23 +137,17 @@
 
         <div class="members-grid">
           <!-- 创建者 -->
-          <router-link :to="`/profile/${project.creator?.id}`" class="member-card creator">
-            <div class="member-avatar">{{ project.creator?.username?.charAt(0).toUpperCase() }}</div>
+          <div class="member-card creator">
+            <UserAvatar :user="project.creator" :size="48" style="margin: 0 auto 8px" />
             <div class="member-name">{{ project.creator?.username }}</div>
             <div class="member-role">创建者</div>
-          </router-link>
+          </div>
           <!-- 成员 -->
-          <router-link
-            v-for="m in project.members"
-            :key="m.id"
-            :to="`/profile/${m.id}`"
-            class="member-card"
-          >
-            <img v-if="m.avatar" :src="m.avatar" class="member-avatar-img" />
-            <div v-else class="member-avatar">{{ m.username?.charAt(0).toUpperCase() }}</div>
+          <div v-for="m in project.members" :key="m.id" class="member-card">
+            <UserAvatar :user="m" :size="48" style="margin: 0 auto 8px" />
             <div class="member-name">{{ m.username }}</div>
             <div class="member-role">成员</div>
-          </router-link>
+          </div>
 
           <!-- 空位 -->
           <div
@@ -187,8 +181,7 @@
         <div v-for="c in comments" :key="c.id" class="comment-item">
           <div class="comment-header">
             <div class="flex gap-8" style="align-items:center">
-              <img v-if="c.author?.avatar" :src="c.author.avatar" class="c-avatar" />
-              <div v-else class="c-avatar c-avatar-placeholder">{{ c.author?.username?.charAt(0).toUpperCase() }}</div>
+              <UserAvatar v-if="c.author" :user="c.author" :size="28" />
               <strong class="text-small">{{ c.author?.username }}</strong>
               <span class="text-muted text-small">{{ formatDate(c.createdAt) }}</span>
             </div>
@@ -206,6 +199,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import api from '../api'
 import { useAuthStore } from '../stores/auth'
+import UserAvatar from '../components/UserAvatar.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -309,7 +303,7 @@ function formatDate(d) { return new Date(d).toLocaleString('zh-CN', { year: 'num
 .back-link:hover { color: var(--text-primary); }
 
 .project-hero { padding: 32px; }
-.project-title { font-size: 28px; font-weight: 800; margin: 12px 0; }
+.project-title { font-size: 28px; font-family: Georgia, serif; font-weight: 400; margin: 12px 0; }
 .project-desc { font-size: 15px; color: var(--text-secondary); line-height: 1.7; }
 
 .project-meta {
@@ -324,7 +318,7 @@ function formatDate(d) { return new Date(d).toLocaleString('zh-CN', { year: 'num
 .meta-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
 .meta-val { font-size: 15px; font-weight: 600; }
 .meta-val.link { color: var(--accent); }
-.meta-val.link:hover { color: #a5b4fc; }
+.meta-val.link:hover { color: var(--accent); }
 
 .github-link {
   display: inline-flex;
@@ -337,7 +331,7 @@ function formatDate(d) { return new Date(d).toLocaleString('zh-CN', { year: 'num
   padding: 4px 14px;
   transition: border-color 0.2s, color 0.2s;
 }
-.github-link:hover { border-color: var(--accent); color: #a5b4fc; }
+.github-link:hover { border-color: var(--accent); color: var(--accent); }
 
 .action-row {
   display: flex;
@@ -379,8 +373,8 @@ function formatDate(d) { return new Date(d).toLocaleString('zh-CN', { year: 'num
   min-width: 22px;
   height: 22px;
   padding: 0 6px;
-  background: rgba(99,102,241,0.15);
-  color: #a5b4fc;
+  background: rgba(217, 119, 87, 0.15);
+  color: var(--accent);
   border-radius: 9999px;
   font-size: 12px;
   font-weight: 600;
@@ -409,7 +403,7 @@ function formatDate(d) { return new Date(d).toLocaleString('zh-CN', { year: 'num
 .member-card.empty { cursor: default; opacity: 0.4; }
 .member-avatar {
   width: 40px; height: 40px; border-radius: 50%;
-  background: var(--gradient); color: #fff;
+  background: var(--accent); color: #fff;
   display: flex; align-items: center; justify-content: center;
   font-size: 16px; font-weight: 700;
 }
@@ -422,7 +416,7 @@ function formatDate(d) { return new Date(d).toLocaleString('zh-CN', { year: 'num
 .comment-input-row { display: flex; gap: 10px; align-items: center; }
 .commenter-avatar {
   width: 32px; height: 32px; border-radius: 50%;
-  background: var(--gradient); color: #fff;
+  background: var(--accent); color: #fff;
   display: flex; align-items: center; justify-content: center;
   font-size: 13px; font-weight: 700; flex-shrink: 0;
 }
@@ -434,7 +428,7 @@ function formatDate(d) { return new Date(d).toLocaleString('zh-CN', { year: 'num
 .comment-body { font-size: 14px; color: var(--text-secondary); line-height: 1.6; padding-left: 40px; }
 .c-avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
 .c-avatar-placeholder {
-  background: var(--gradient); color: #fff;
+  background: var(--accent); color: #fff;
   display: flex; align-items: center; justify-content: center;
   font-size: 11px; font-weight: 700;
 }

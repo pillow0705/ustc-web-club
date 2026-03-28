@@ -1,45 +1,44 @@
 <template>
   <div class="home">
     <!-- Hero -->
-    <section class="hero">
-      <h1 class="hero-title">
-        <span class="gradient-text">USTC Vibe Club</span>
-      </h1>
-      <p class="hero-sub">
-        USTC Vibe Club 是刚刚建立的Vibe-coding俱乐部。<br />
-        热爱AI tools，每周在西区和高新区各举行一次活动，用 Cursor、Claude Code、Codex、openclaw 等工具协作开发可以落地的项目<br />
-        我们探究怎么用最短的时间落地高质量的代码，我们尝试让AI去接管一切<br />
-        即将迎来AI大基建的时代，俱乐部期待聚合全校力量，为世界贡献一份科大力量<br />
-        俱乐部融合教学和实践两个功能，如果你和AI的互动还停留在网页对话上，欢迎加入俱乐部学习
-      </p>
-      <div class="hero-actions">
-        <router-link to="/register" class="btn btn-primary hero-btn">立即加入</router-link>
-        <router-link to="/handbook" class="btn btn-ghost hero-btn">阅读成员手册 →</router-link>
-      </div>
+    <div class="hero-wrap">
+      <section class="hero">
+        <div class="hero-badge">✦ Vibe Coding · USTC</div>
+        <h1 class="hero-title">USTC Vibe Club</h1>
+        <p class="hero-sub">
+          我们是科大刚刚建立的 Vibe Coding 俱乐部。<br />
+          每周协作开发，用 Cursor、Claude Code、MCP 等工具把想法真正落地。<br />
+          即将迎来 AI 大基建时代，期待聚合全校力量，为世界贡献一份科大力量。
+        </p>
+        <div class="hero-actions">
+          <router-link to="/register" class="btn hero-btn-primary">立即加入</router-link>
+          <router-link to="/handbook" class="btn hero-btn-ghost">阅读成员手册 →</router-link>
+        </div>
 
-      <!-- 数据 -->
-      <div class="hero-stats">
-        <div class="stat-item">
-          <div class="stat-num gradient-text">{{ activities.length || '∞'  }}</div>
-          <div class="stat-label">场活动</div>
+        <!-- 数据 -->
+        <div class="hero-stats">
+          <div class="stat-item">
+            <div class="stat-num">{{ activities.length || '–' }}</div>
+            <div class="stat-label">场活动</div>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <div class="stat-num">{{ projects.length || '–' }}</div>
+            <div class="stat-label">个项目</div>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <div class="stat-num">{{ members.length || '–' }}</div>
+            <div class="stat-label">位成员</div>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <div class="stat-num">2</div>
+            <div class="stat-label">次 / 周</div>
+          </div>
         </div>
-        <div class="stat-divider"></div>
-        <div class="stat-item">
-          <div class="stat-num gradient-text">{{ projects.length || '∞' }}</div>
-          <div class="stat-label">个项目</div>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat-item">
-          <div class="stat-num gradient-text">{{ members.length || '∞' }}</div>
-          <div class="stat-label">位成员</div>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat-item">
-          <div class="stat-num gradient-text">2</div>
-          <div class="stat-label">次 / 周</div>
-        </div>
-      </div>
-    </section>
+      </section>
+    </div>
 
     <!-- 活动流程 -->
     <section class="section">
@@ -191,43 +190,118 @@ function formatDate(d) {
 </script>
 
 <style scoped>
-/* Hero */
-.hero { text-align: center; padding: 72px 0 48px; position: relative; }
-.hero::before {
-  content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-  width: 700px; height: 400px;
-  background: radial-gradient(ellipse at center top, rgba(99,102,241,0.22) 0%, transparent 70%);
-  pointer-events: none; z-index: -1;
+/* ── Hero Wrap ── */
+.hero-wrap {
+  margin: -40px -24px 0;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 56px;
 }
-.hero-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 6px 16px; background: rgba(99,102,241,0.1);
-  border: 1px solid rgba(99,102,241,0.25); border-radius: 9999px;
-  font-size: 13px; color: #a5b4fc; margin-bottom: 28px;
-}
-.hero-title {
-  font-size: clamp(28px, 5vw, 52px); font-weight: 800;
-  line-height: 1.2; margin-bottom: 30px; letter-spacing: -0.5px;
-}
-.hero-sub { font-size: 23px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 36px; }
-.hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 52px; }
-.hero-btn { padding: 12px 28px; font-size: 15px; }
 
+/* Hero 内容 */
+.hero {
+  text-align: center;
+  padding: 80px 24px 0;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 5px 16px;
+  background: transparent;
+  border: 1px solid var(--border-accent);
+  border-radius: 9999px;
+  font-size: 12px; font-weight: 400;
+  color: var(--accent);
+  margin-bottom: 28px;
+  letter-spacing: 0.04em;
+  animation: fade-up 0.5s ease both;
+}
+
+.hero-title {
+  font-family: Georgia, serif;
+  font-size: clamp(36px, 6vw, 60px);
+  font-weight: 400;
+  line-height: 1.15;
+  margin-bottom: 24px;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  animation: fade-up 0.5s ease 0.1s both;
+}
+
+.hero-sub {
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.9;
+  margin-bottom: 40px;
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
+  animation: fade-up 0.5s ease 0.2s both;
+}
+
+.hero-actions {
+  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  margin-bottom: 52px;
+  animation: fade-up 0.5s ease 0.25s both;
+}
+
+.hero-btn-primary {
+  padding: 11px 26px; font-size: 14px; font-weight: 500;
+  background: var(--accent); color: #fff;
+  border-radius: 6px; border: none;
+  transition: background 0.2s, transform 0.2s;
+}
+.hero-btn-primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+  color: #fff;
+}
+
+.hero-btn-ghost {
+  padding: 11px 26px; font-size: 14px; font-weight: 400;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  transition: border-color 0.2s, color 0.2s;
+}
+.hero-btn-ghost:hover {
+  border-color: var(--border-accent);
+  color: var(--text-primary);
+}
+
+/* 数据统计条 */
 .hero-stats {
   display: inline-flex; align-items: center;
-  background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: 16px; padding: 20px 40px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 36px;
+  animation: fade-up 0.5s ease 0.3s both;
 }
-.stat-item { text-align: center; padding: 0 28px; }
-.stat-num { font-size: 32px; font-weight: 800; }
-.stat-label { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
-.stat-divider { width: 1px; height: 40px; background: var(--border); }
+.stat-item { text-align: center; padding: 0 24px; }
+.stat-num {
+  font-family: Georgia, serif;
+  font-size: 30px; font-weight: 400;
+  color: var(--accent);
+}
+.stat-label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.stat-divider { width: 1px; height: 36px; background: var(--border); }
+
+/* 入场动画 */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
 /* Sections */
-.section { margin: 56px 0; }
-.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-.section-header h2 { font-size: 20px; font-weight: 700; }
-.section-header-plain { font-size: 20px; font-weight: 700; margin-bottom: 20px; }
+.section { margin: 60px 0; }
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+.section-header h1,
+.section-header h2 { font-family: Georgia, serif; font-size: 22px; font-weight: 400; }
+.section-header-plain { font-family: Georgia, serif; font-size: 22px; font-weight: 400; margin-bottom: 24px; }
 
 /* Activity flow */
 .flow-grid {
@@ -240,13 +314,13 @@ function formatDate(d) {
 }
 .flow-card:hover { border-color: var(--border-accent); }
 .highlight-card {
-  border-color: rgba(99,102,241,0.35);
-  background: rgba(99,102,241,0.05);
+  border-color: var(--border-accent);
+  background: rgba(217, 119, 87, 0.04);
 }
 .flow-num { font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 8px; }
 .flow-icon { font-size: 28px; margin-bottom: 10px; }
 .flow-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
-.flow-time { font-size: 12px; color: #a5b4fc; margin-bottom: 8px; }
+.flow-time { font-size: 12px; color: var(--accent); margin-bottom: 8px; }
 .flow-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
 .flow-arrow { font-size: 20px; color: var(--text-muted); flex-shrink: 0; }
 .flow-note { text-align: center; font-size: 23px; color: var(--text-secondary); margin-top: 16px; }
@@ -286,20 +360,15 @@ function formatDate(d) {
   min-width: 140px;
 }
 .act-time-label { font-size: 11px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
-.act-time-val { font-size: 14px; font-weight: 600; color: #a5b4fc; }
+.act-time-val { font-size: 14px; font-weight: 500; color: var(--accent); }
 
 /* CTA */
 .cta-section {
-  position: relative; text-align: center; padding: 60px 24px; margin-top: 48px;
-  background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; overflow: hidden;
+  text-align: center; padding: 60px 24px; margin-top: 48px;
+  background: var(--bg-surface); border: 1px solid var(--border); border-radius: 16px;
 }
-.cta-glow {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  width: 400px; height: 200px;
-  background: radial-gradient(ellipse, rgba(99,102,241,0.15), transparent 70%);
-  pointer-events: none;
-}
-.cta-section h2 { font-size: 28px; font-weight: 800; }
+.cta-glow { display: none; }
+.cta-section h2 { font-family: Georgia, serif; font-size: 28px; font-weight: 400; }
 
 @media (max-width: 768px) {
   .flow-grid { flex-direction: column; }

@@ -287,7 +287,7 @@ watch(() => route.params.id, loadProfile)
 </script>
 
 <style scoped>
-.profile-name { font-size: 22px; font-weight: 800; }
+.profile-name { font-size: 22px; font-family: Georgia, serif; font-weight: 400; }
 .follow-stats { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-secondary); }
 .follow-stat-item strong { color: var(--text-primary); font-weight: 700; margin-right: 3px; }
 .follow-stat-sep { color: var(--border); }
@@ -302,7 +302,7 @@ watch(() => route.params.id, loadProfile)
   padding: 3px 12px;
   transition: border-color 0.2s, color 0.2s;
 }
-.github-link:hover { border-color: var(--accent); color: #a5b4fc; }
+.github-link:hover { border-color: var(--accent); color: var(--accent); }
 
 .stats-box { display: flex; gap: 20px; }
 .stat-item { display: flex; flex-direction: column; align-items: center; gap: 2px; }
@@ -323,8 +323,8 @@ watch(() => route.params.id, loadProfile)
   min-width: 22px;
   height: 22px;
   padding: 0 6px;
-  background: rgba(99,102,241,0.15);
-  color: #a5b4fc;
+  background: rgba(217, 119, 87, 0.15);
+  color: var(--accent);
   border-radius: 9999px;
   font-size: 12px;
   font-weight: 600;
@@ -338,7 +338,7 @@ watch(() => route.params.id, loadProfile)
   color: var(--text-primary);
   transition: color 0.2s;
 }
-.proj-title:hover { color: #a5b4fc; }
+.proj-title:hover { color: var(--accent); }
 
 .edit-form {
   background: var(--bg-surface);
@@ -351,7 +351,7 @@ watch(() => route.params.id, loadProfile)
 .avatar-wrap { position: relative; width: 72px; height: 72px; flex-shrink: 0; }
 .avatar {
   width: 72px; height: 72px; border-radius: 50%;
-  background: var(--gradient); color: #fff;
+  background: var(--accent); color: #fff;
   display: flex; align-items: center; justify-content: center;
   font-size: 28px; font-weight: 700;
 }
